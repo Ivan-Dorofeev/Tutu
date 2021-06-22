@@ -37,19 +37,20 @@ def parser():
             else:
                 break
         top_10_list = collections.Counter(flights_ab).most_common(10)
-        print(top_10_list)
+        # print(top_10_list)
     else:
         print(f'Oops, ошибка запроса на сайт - {response2.status_code}')
 
-    res = []
+    result = []
     for i in top_10_list:
         air_name_out = i[0][:3]
         air_name_in = i[0][3:]
         if air_name_in in airports_dict.keys():
             if air_name_out in airports_dict.keys():
-                res.append([airports_dict[air_name_in],airports_dict[air_name_out],i[1]])
+                result.append([airports_dict[air_name_in],airports_dict[air_name_out],i[1]])
 
-    print(res)
+    for i in result:
+        print(f' Аэропорта вылета {i[0]}, Аэропорт прилёта {i[1]}, {i[2]} раз встречалось направление')
 
 
 if __name__ == '__main__':
