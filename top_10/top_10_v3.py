@@ -1,9 +1,4 @@
-import collections
-import csv
-import operator
-import random
 from sys import getsizeof
-
 import requests as requests
 
 
@@ -20,24 +15,25 @@ def parser_airports():
     return airports_dict
 
 
-def parser_routes():  # keys = 37595
+def parser_routes():
     """ Парсим короткие названия аэропортов, находим кол-во их повторений """
 
     url2 = 'https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat'
     flights_dict = {}
-    for line in requests.get(url2).text.split('\n'):
-        if len(line) > 4:
-            flight = line.split(',')[2] + line.split(',')[4]
-            if flight in flights_dict.keys():
-                flights_dict[flight] += 1
-            else:
-                flights_dict[flight] = 1
+    size_file = len(requests.get(url2).text.split('\n'))
+    for i in range(0, size_file + 1):
+        file_string = requests.get(url2).text.split('\n')[i]
+        flight = file_string.split(',')[2] + file_string.split(',')[4]
+        if flight in flights_dict.keys():
+            flights_dict[flight] += 1
+        else:
+            flights_dict[flight] = 1
+    # Вычисляем топ 10 частых направлений из словаря flights_dict
     count = 0
     res = []
     for w in sorted(flights_dict, key=flights_dict.get, reverse=True):
         count += 1
         if count == 11:
-            del flights_dict
             break
         res.append([w, flights_dict[w]])
     return res
